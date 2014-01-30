@@ -32,7 +32,7 @@
         , $video_table_header_cell = $('<td/>', { 'width': '85%' }).html('<a href="#">↑</a>&nbsp;Preview Tracks&nbsp;')
           
         , $toggle_link = $('<a/>').attr('href', '#')
-        , setState = function(open) {
+        , setToggleState = function(open) {
             if (open) {
               $toggle_link.text('(Hide)')
               plugin.$videos_container.show()
@@ -43,12 +43,12 @@
             GM_setValue('is_open', open)
           }
       
-      setState(GM_getValue('is_open'))
+      setToggleState(GM_getValue('is_open'))
       
       $toggle_link.on('click', function(e){
         var new_state = !GM_getValue('is_open')
         e.preventDefault()
-        setState(new_state)
+        setToggleState(new_state)
       })
       
       $video_table_header_cell.append($toggle_link)
