@@ -112,10 +112,9 @@
       
     }
     
-  , getSong: function(song_link){
+  , getSong: function($song_link){
       
-      var $song_link = $(song_link)
-        , song_name = $song_link.text()
+      var song_name = $song_link.text()
       
       if (song_name.toLowerCase().search(plugin.artist_name.toLowerCase()) == -1)
         song_name += ' by ' + plugin.artist_name
