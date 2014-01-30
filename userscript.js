@@ -123,7 +123,7 @@
         if (!data.feed.entry) {
           $song_link.css({'color': '#ccc', 'text-decoration': 'line-through'}).off('click').on('click', function(e){
             e.preventDefault()
-            alert('No YouTube videos wer found for "' + song_name + '"')
+            alert('No YouTube videos were found for "' + song_name + '"')
           })
           return
         }
