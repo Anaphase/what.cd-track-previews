@@ -42,8 +42,21 @@
             }
             GM_setValue('is_open', open)
           }
+          
+        , $mode_link = $('<a/>').attr('href', '#').css('float', 'right')
+        , setMode = function(mode) {
+            if (mode == 'video') {
+              $mode_link.text('(Switch to Audio Mode)')
+              $('.preview_video').css('height', '326px')
+            } else {
+              $mode_link.text('(Switch to Video Mode)')
+              $('.preview_video').css('height', '35px')
+            }
+            GM_setValue('mode', mode)
+          }
       
       setToggleState(GM_getValue('is_open'))
+      setMode(GM_getValue('mode'))
       
       $toggle_link.on('click', function(e){
         var new_state = !GM_getValue('is_open')
@@ -51,7 +64,14 @@
         setToggleState(new_state)
       })
       
+      $mode_link.on('click', function(e){
+        var new_state = GM_getValue('mode') == 'video' ? 'audio' : 'video'
+        e.preventDefault()
+        setMode(new_state)
+      })
+      
       $video_table_header_cell.append($toggle_link)
+      $video_table_header_cell.append($mode_link)
       $video_table_header_row.html($video_table_header_cell)
       $video_table_header.html($video_table_header_row)
       
@@ -115,6 +135,21 @@
   , getSong: function($song_link){
       
       var song_name = $song_link.text()
+        , getIframe = null
+      
+      if (GM_getValue('mode') == 'video') {
+        
+        getIframe = function(video_id){
+          return '<iframe id="preview_video_' + video_id + '" class="preview_video" style="display: block; margin-top: 5px; width: 580px; height: 326px; border: none;" src="' + plugin.protocol + '//www.youtube.com/embed/' + video_id + '?color=white&theme=dark&rel=0&autoplay=1&autohide=0&iv_load_policy=3" allowfullscreen></iframe>'
+        }
+        
+      } else {
+        
+        getIframe = function(video_id){
+          return '<iframe id="preview_video_' + video_id + '" class="preview_video" style="display: block; margin-top: 5px; width: 580px; height: 35px; border: none;" src="' + plugin.protocol + '//www.youtube.com/embed/' + video_id + '?color=white&theme=dark&rel=0&autoplay=1&autohide=0&iv_load_policy=3" allowfullscreen></iframe>'
+        }
+        
+      }
       
       if (song_name.toLowerCase().search(plugin.artist_name.toLowerCase()) == -1)
         song_name += ' by ' + plugin.artist_name
@@ -134,7 +169,8 @@
         video_id = data.feed.entry[0].media$group.yt$videoid.$t
         
         $song_link.data('video_id', video_id)
-        $song_link.after('<iframe id="preview_video_' + video_id + '" class="preview_video" style="display: block;" width="100%" height="326" src="' + plugin.protocol + '//www.youtube.com/embed/' + video_id + '?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>')
+        $song_link.after(getIframe(video_id))
+        
       })
       
     }
