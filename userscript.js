@@ -120,6 +120,9 @@
         song_name += ' by ' + plugin.artist_name
       
       $.getJSON(plugin.protocol + '//gdata.youtube.com/feeds/api/videos?v=2&alt=json&orderby=relevance&q=' + song_name, function(data){
+        
+        var video_id = null
+        
         if (!data.feed.entry) {
           $song_link.css({'color': '#ccc', 'text-decoration': 'line-through'}).off('click').on('click', function(e){
             e.preventDefault()
@@ -127,7 +130,9 @@
           })
           return
         }
-        var video_id = data.feed.entry[0].media$group.yt$videoid.$t
+        
+        video_id = data.feed.entry[0].media$group.yt$videoid.$t
+        
         $song_link.data('video_id', video_id)
         $song_link.after('<iframe id="preview_video_' + video_id + '" class="preview_video" style="display: block;" width="100%" height="326" src="' + plugin.protocol + '//www.youtube.com/embed/' + video_id + '?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>')
       })
