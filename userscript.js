@@ -34,21 +34,21 @@
         , $toggle_link = $('<a/>').attr('href', '#')
         , setState = function(open) {
             if (open) {
-              $toggle_link.text('(Hide)').data('open', true)
+              $toggle_link.text('(Hide)')
               plugin.$videos_container.show()
             } else {
-              $toggle_link.text('(Show)').data('open', false)
+              $toggle_link.text('(Show)')
               plugin.$videos_container.hide()
             }
+            GM_setValue('is_open', open)
           }
       
       setState(GM_getValue('is_open'))
       
       $toggle_link.on('click', function(e){
-        var new_state = !$toggle_link.data('open')
+        var new_state = !GM_getValue('is_open')
         e.preventDefault()
         setState(new_state)
-        GM_setValue('is_open', new_state)
       })
       
       $video_table_header_cell.append($toggle_link)
