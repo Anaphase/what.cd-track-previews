@@ -48,7 +48,7 @@
               plugin.$videos_container.hide()
               plugin.$options.hide()
             }
-            GM_setValue('is_open', open)
+            setTimeout(function(){ GM_setValue('is_open', open) })
           }
           
         , $theme_swatch = $('<div/>').css({ 'width': '14px', 'height': '14px', 'margin-left': '5px', 'border': '1px solid #fff' })
@@ -72,7 +72,7 @@
                 $dark_theme_link.css('opacity', '1')
                 break
             }
-            GM_setValue('theme', theme)
+            setTimeout(function(){ GM_setValue('theme', theme) })
           }
           
         , $mode_link = $('<a/>').attr({'href': '#', 'title': 'Switch between video and audio-only modes.'}).css('float', 'right').addClass('tooltip')
@@ -84,7 +84,7 @@
               $mode_link.text('(Video Off)')
               $('.preview_video').css('height', '35px')
             }
-            GM_setValue('mode', mode)
+            setTimeout(function(){ GM_setValue('mode', mode) })
           }
       
       plugin.tooltipster_elements.push($no_theme_link)
