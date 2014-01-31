@@ -23,6 +23,7 @@
   , song_list: []
   , video_number: 0
     
+  , $options: $('<div/>').css('float', 'right')
   , $videos_table: $('<table/>', { 'id': 'videos_table' })
   , $videos_container: $('<tbody/>', { 'id': 'videos_container' })
     
@@ -41,14 +42,40 @@
             if (open) {
               $toggle_link.text('(Hide)')
               plugin.$videos_container.show()
+              plugin.$options.show()
             } else {
               $toggle_link.text('(Show)')
               plugin.$videos_container.hide()
+              plugin.$options.hide()
             }
             GM_setValue('is_open', open)
           }
           
-        , $mode_link = $('<a/>').attr({'href': '#', 'title': 'Switch between full-video and audio-only modes.'}).css('float', 'right').addClass('tooltip')
+        , $theme_swatch = $('<div/>').css({ 'width': '14px', 'height': '14px', 'margin-left': '5px', 'border': '1px solid #fff' })
+        , $no_theme_link = $('<a/>').attr({'href': '#', 'title': 'No Theme'}).css('float', 'right').addClass('tooltip')
+        , $light_theme_link = $('<a/>').attr({'href': '#', 'title': 'Light Theme'}).css('float', 'right').addClass('tooltip')
+        , $dark_theme_link = $('<a/>').attr({'href': '#', 'title': 'Dark Theme'}).css('float', 'right').addClass('tooltip')
+        , setTheme = function(theme) {
+            $no_theme_link.css('opacity', '0.5')
+            $light_theme_link.css('opacity', '0.5')
+            $dark_theme_link.css('opacity', '0.5')
+            switch (theme) {
+              case 'none':
+                $no_theme_link.css('opacity', '1')
+                break;
+              
+              case 'light':
+                $light_theme_link.css('opacity', '1')
+                break;
+              
+              case 'dark':
+                $dark_theme_link.css('opacity', '1')
+                break;
+            }
+            GM_setValue('theme', theme)
+          }
+          
+        , $mode_link = $('<a/>').attr({'href': '#', 'title': 'Switch between video and audio-only modes.'}).css('float', 'right').addClass('tooltip')
         , setMode = function(mode) {
             if (mode == 'video') {
               $mode_link.text('(Video On)')
@@ -60,9 +87,17 @@
             GM_setValue('mode', mode)
           }
       
+      plugin.tooltipster_elements.push($no_theme_link)
+      plugin.tooltipster_elements.push($light_theme_link)
+      plugin.tooltipster_elements.push($dark_theme_link)
       plugin.tooltipster_elements.push($mode_link)
       
+      $no_theme_link.html($theme_swatch.clone().css('background-color', '#c00014'))
+      $light_theme_link.html($theme_swatch.clone().css('background-color', '#ddd'))
+      $dark_theme_link.html($theme_swatch.clone().css('background-color', '#444'))
+      
       setToggleState(GM_getValue('is_open'))
+      setTheme(GM_getValue('theme'))
       setMode(GM_getValue('mode'))
       
       $toggle_link.on('click', function(e){
@@ -71,14 +106,34 @@
         setToggleState(new_state)
       })
       
+      $no_theme_link.on('click', function(e){
+        e.preventDefault()
+        setTheme('none')
+      })
+      
+      $light_theme_link.on('click', function(e){
+        e.preventDefault()
+        setTheme('light')
+      })
+      
+      $dark_theme_link.on('click', function(e){
+        e.preventDefault()
+        setTheme('dark')
+      })
+      
       $mode_link.on('click', function(e){
         var new_state = GM_getValue('mode') == 'video' ? 'audio' : 'video'
         e.preventDefault()
         setMode(new_state)
       })
       
+      plugin.$options.append($dark_theme_link)
+      plugin.$options.append($light_theme_link)
+      plugin.$options.append($no_theme_link)
+      plugin.$options.append($mode_link)
+      
       $video_table_header_cell.append($toggle_link)
-      $video_table_header_cell.append($mode_link)
+      $video_table_header_cell.append(plugin.$options)
       $video_table_header_row.html($video_table_header_cell)
       $video_table_header.html($video_table_header_row)
       
@@ -142,18 +197,29 @@
   , getSong: function($song_link){
       
       var song_name = $song_link.text()
+        , theme_string = ''
         , getIframe = null
+      
+      switch (GM_getValue('theme')) {
+        case 'light':
+          theme_string = '&color=white&theme=light'
+          break;
+        
+        case 'dark':
+          theme_string = '&color=white&theme=dark'
+          break;
+      }
       
       if (GM_getValue('mode') == 'video') {
         
         getIframe = function(video_id){
-          return '<iframe id="preview_video_' + video_id + '" class="preview_video" style="display: block; margin-top: 5px; width: 580px; height: 326px; border: none;" src="' + plugin.protocol + '//www.youtube.com/embed/' + video_id + '?color=white&theme=dark&rel=0&autoplay=1&autohide=0&iv_load_policy=3" allowfullscreen></iframe>'
+          return '<iframe id="preview_video_' + video_id + '" class="preview_video" style="display: block; margin-top: 5px; width: 580px; height: 326px; border: none;" src="' + plugin.protocol + '//www.youtube.com/embed/' + video_id + '?rel=0&autoplay=1&autohide=0&iv_load_policy=3' + theme_string +'" allowfullscreen></iframe>'
         }
         
       } else {
         
         getIframe = function(video_id){
-          return '<iframe id="preview_video_' + video_id + '" class="preview_video" style="display: block; margin-top: 5px; width: 580px; height: 35px; border: none;" src="' + plugin.protocol + '//www.youtube.com/embed/' + video_id + '?color=white&theme=dark&rel=0&autoplay=1&autohide=0&iv_load_policy=3" allowfullscreen></iframe>'
+          return '<iframe id="preview_video_' + video_id + '" class="preview_video" style="display: block; margin-top: 5px; width: 580px; height: 35px; border: none;" src="' + plugin.protocol + '//www.youtube.com/embed/' + video_id + '?rel=0&autoplay=1&autohide=0&iv_load_policy=3' + theme_string +'" allowfullscreen></iframe>'
         }
         
       }
