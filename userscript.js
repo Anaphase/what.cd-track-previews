@@ -187,12 +187,7 @@
   plugin.injectVideoTable()
   plugin.getSongList()
   
-  for (var i=0; i<plugin.tooltipster_elements.length; i++) {
-    plugin.tooltipster_elements[i].tooltipster({
-      delay: tooltip_delay // tooltip_delay is a global variable set by what.cd
-    , updateAnimation: false
-    , maxWidth: 400
-    })
-  }
+  for (var i=0; i<plugin.tooltipster_elements.length; i++)
+    plugin.tooltipster_elements[i].tooltipster({delay: 0})
   
 })(jQuery)
