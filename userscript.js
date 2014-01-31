@@ -51,10 +51,10 @@
         , $mode_link = $('<a/>').attr({'href': '#', 'title': 'Switch between full-video and audio-only modes.'}).css('float', 'right').addClass('tooltip')
         , setMode = function(mode) {
             if (mode == 'video') {
-              $mode_link.text('(Video Mode)')
+              $mode_link.text('(Video On)')
               $('.preview_video').css('height', '326px')
             } else {
-              $mode_link.text('(Audio Mode)')
+              $mode_link.text('(Video Off)')
               $('.preview_video').css('height', '35px')
             }
             GM_setValue('mode', mode)
