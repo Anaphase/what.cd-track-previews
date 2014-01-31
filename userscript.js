@@ -62,15 +62,15 @@
             switch (theme) {
               case 'none':
                 $no_theme_link.css('opacity', '1')
-                break;
+                break
               
               case 'light':
                 $light_theme_link.css('opacity', '1')
-                break;
+                break
               
               case 'dark':
                 $dark_theme_link.css('opacity', '1')
-                break;
+                break
             }
             GM_setValue('theme', theme)
           }
@@ -203,11 +203,11 @@
       switch (GM_getValue('theme')) {
         case 'light':
           theme_string = '&color=white&theme=light'
-          break;
+          break
         
         case 'dark':
           theme_string = '&color=white&theme=dark'
-          break;
+          break
       }
       
       if (GM_getValue('mode') == 'video') {
