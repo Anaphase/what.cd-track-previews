@@ -20,6 +20,7 @@
     protocol: window.location.protocol
     
   , artist_name: $('h2 a').text()
+  , album_name: $('h2 span').text()
   , song_list: []
   , video_number: 0
     
@@ -152,7 +153,7 @@
           , song_name = (/\(?\d*[\.-:]?\)? *-?(.+)\.(?:mp3|flac|aac|ac3|dts)$/i).exec(song)
         
         if (song_name) {
-          song_name = song_name[1].replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '')
+          song_name = song_name[1].replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '').replace(/_/g, ' ')
           plugin.song_list.push(song_name)
           plugin.video_number++
           
@@ -196,7 +197,7 @@
     
   , getSong: function($song_link){
       
-      var song_name = $song_link.text()
+      var search_query = $song_link.text().toLowerCase()
         , theme_string = ''
         , getIframe = null
       
@@ -224,17 +225,22 @@
         
       }
       
-      if (song_name.toLowerCase().search(plugin.artist_name.toLowerCase()) == -1)
-        song_name += ' by ' + plugin.artist_name
+      if (plugin.artist_name != '') {
+        if (search_query.search(plugin.artist_name.toLowerCase()) == -1)
+          search_query += ' by ' + plugin.artist_name
+      } else if (plugin.album_name != '') {
+        if (search_query.search(plugin.album_name.toLowerCase()) == -1)
+          search_query += ' ' + plugin.album_name
+      }
       
-      $.getJSON(plugin.protocol + '//gdata.youtube.com/feeds/api/videos?v=2&alt=json&orderby=relevance&q=' + song_name, function(data){
+      $.getJSON(plugin.protocol + '//gdata.youtube.com/feeds/api/videos?v=2&alt=json&orderby=relevance&q=' + search_query, function(data){
         
         var video_id = null
         
         if (!data.feed.entry) {
           $song_link.css({'color': '#ccc', 'text-decoration': 'line-through'}).off('click').on('click', function(e){
             e.preventDefault()
-            alert('No YouTube videos were found for "' + song_name + '"')
+            alert('No YouTube videos were found for "' + search_query + '"')
           })
           return
         }
