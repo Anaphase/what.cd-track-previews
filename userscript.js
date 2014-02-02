@@ -149,7 +149,7 @@
       $('.filelist_table:first tr:gt(0)').each(function(){
         
         var song = $(this).find('td:first').text()
-          , song_name = (/\(?\d+[\.-:]?\)? *-?(.+)\..*$/i).exec(song)
+          , song_name = (/\(?\d*[\.-:]?\)? *-?(.+)\.(?:mp3|flac|aac|ac3|dts)$/i).exec(song)
         
         if (song_name) {
           song_name = song_name[1].replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '')
