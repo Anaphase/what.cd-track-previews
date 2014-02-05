@@ -25,7 +25,7 @@
   , video_number: 0
     
   , $options: $('<div/>').css('float', 'right')
-  , $videos_table: $('<table/>', { 'id': 'videos_table' })
+  , $videos_table: $('<table/>', { 'id': 'videos_table' }).css('width', '100%')
   , $videos_container: $('<tbody/>', { 'id': 'videos_container' })
     
   , tooltipster_elements: []
