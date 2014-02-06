@@ -97,7 +97,7 @@
       $light_theme_link.html($theme_swatch.clone().css('background-color', '#ddd'))
       $dark_theme_link.html($theme_swatch.clone().css('background-color', '#444'))
       
-      setToggleState(GM_getValue('is_open') || true)
+      setToggleState((GM_getValue('is_open') == undefined) ? true : GM_getValue('is_open'))
       setTheme(GM_getValue('theme') || 'none')
       setMode(GM_getValue('mode') || 'video')
       
