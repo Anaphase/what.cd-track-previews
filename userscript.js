@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         What.cd Track Previews
-// @version      1.1.5
+// @version      1.1.6
 // @description  Adds a tracklist to album pages. When a track name is clicked, a YouTube video of the song will play.
 // @match        http://what.cd/torrents.php*
 // @match        https://what.cd/torrents.php*
