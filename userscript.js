@@ -225,6 +225,9 @@
         
       }
       
+      // remove featured artist and producers from song name (also trim string)
+      search_query = search_query.replace(/\((prod|feat).*?\)/i, '').replace(/^\s+|\s+$/g, '')
+      
       if (plugin.artist_name != '') {
         if (search_query.search(plugin.artist_name) == -1)
           search_query += ' by ' + plugin.artist_name
