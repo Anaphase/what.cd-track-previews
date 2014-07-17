@@ -19,8 +19,8 @@
     
     protocol: window.location.protocol
     
-  , artist_name: $('h2 a').text()
-  , album_name: $('h2 span').text()
+  , artist_name: $('h2 a').text().toLowerCase()
+  , album_name: $('h2 span').text().toLowerCase()
   , song_list: []
   , video_number: 0
     
@@ -226,10 +226,10 @@
       }
       
       if (plugin.artist_name != '') {
-        if (search_query.search(plugin.artist_name.toLowerCase()) == -1)
+        if (search_query.search(plugin.artist_name) == -1)
           search_query += ' by ' + plugin.artist_name
       } else if (plugin.album_name != '') {
-        if (search_query.search(plugin.album_name.toLowerCase()) == -1)
+        if (search_query.search(plugin.album_name) == -1)
           search_query += ' ' + plugin.album_name
       }
       
